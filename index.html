@@ -6,115 +6,60 @@
     <title>Encrypted Payload</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            background-color: #050505;
-            color: #00FF41; 
+            background-color: #050505; color: #00FF41; 
             font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            perspective: 1000px;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; perspective: 1000px;
         }
 
         /* --- THE ENVELOPE --- */
         .envelope-container {
-            position: relative;
-            width: 340px;
-            height: 220px;
-            cursor: pointer;
-            z-index: 10;
+            position: relative; width: 340px; height: 220px; cursor: pointer; z-index: 10;
             transform: translate(var(--evade-x, 0px), var(--evade-y, 0px)) scale(var(--scale, 1)) rotate(var(--rot, 0deg));
             transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.255), filter 0.2s;
         }
 
-        .envelope-container:hover {
-            --scale: 1.05;
-            --rot: -2deg;
-            filter: drop-shadow(0 0 25px rgba(0, 255, 65, 0.5));
-        }
+        .envelope-container:hover { --scale: 1.05; --rot: -2deg; filter: drop-shadow(0 0 25px rgba(0, 255, 65, 0.5)); }
 
         .baddest-label {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Cinzel Decorative', Georgia, serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #00FF41;
-            text-shadow: 0 0 15px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4);
-            z-index: 5;
-            pointer-events: none;
-            letter-spacing: 2px;
-            transition: opacity 0.3s ease;
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Cinzel Decorative', Georgia, serif; font-size: 2.8rem; font-weight: 700;
+            color: #00FF41; text-shadow: 0 0 15px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4);
+            z-index: 5; pointer-events: none; letter-spacing: 2px; transition: opacity 0.3s ease;
         }
 
         .envelope-body {
-            position: absolute;
-            inset: 0;
-            background-color: #010409;
-            border: 2px solid #00FF41;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 20px;
+            position: absolute; inset: 0; background-color: #010409;
+            border: 2px solid #00FF41; display: flex; justify-content: center;
+            align-items: flex-end; padding-bottom: 20px;
         }
 
         .warning-text {
-            color: #00FF41;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-            pointer-events: none;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            z-index: 5;
-            transition: color 0.3s;
-            text-align: center;
-            max-width: 90%;
+            color: #00FF41; font-weight: bold; animation: pulse 1.5s infinite;
+            pointer-events: none; font-size: 0.85rem; letter-spacing: 1px;
+            z-index: 5; transition: color 0.3s; text-align: center; max-width: 90%;
         }
 
         .flap { position: absolute; width: 0; height: 0; }
-
         .top-flap {
-            top: 0; left: 0;
-            border-top: 110px solid #111;
-            border-left: 170px solid transparent;
-            border-right: 170px solid transparent;
-            transform-origin: top;
-            transition: transform 0.4s ease-in-out;
-            z-index: 4;
+            top: 0; left: 0; border-top: 110px solid #111;
+            border-left: 170px solid transparent; border-right: 170px solid transparent;
+            transform-origin: top; transition: transform 0.4s ease-in-out; z-index: 4;
         }
-
         .bottom-flap {
-            bottom: 0; left: 0;
-            border-bottom: 110px solid #1a1a1a;
-            border-left: 170px solid transparent;
-            border-right: 170px solid transparent;
-            z-index: 3;
+            bottom: 0; left: 0; border-bottom: 110px solid #1a1a1a;
+            border-left: 170px solid transparent; border-right: 170px solid transparent; z-index: 3;
         }
-
         .left-flap {
-            top: 0; left: 0;
-            border-left: 170px solid #0d1117;
-            border-top: 110px solid transparent;
-            border-bottom: 110px solid transparent;
-            z-index: 2;
+            top: 0; left: 0; border-left: 170px solid #0d1117;
+            border-top: 110px solid transparent; border-bottom: 110px solid transparent; z-index: 2;
         }
-
         .right-flap {
-            top: 0; right: 0;
-            border-right: 170px solid #0d1117;
-            border-top: 110px solid transparent;
-            border-bottom: 110px solid transparent;
-            z-index: 2;
+            top: 0; right: 0; border-right: 170px solid #0d1117;
+            border-top: 110px solid transparent; border-bottom: 110px solid transparent; z-index: 2;
         }
 
         .envelope-container.open .top-flap { transform: rotateX(180deg); }
@@ -126,74 +71,37 @@
             0%, 100% { transform: translate(var(--evade-x, 0px), var(--evade-y, 0px)) scale(1) rotate(-1deg); }
             50% { transform: translate(var(--evade-x, 0px), calc(var(--evade-y, 0px) + 6px)) scale(0.96) rotate(1deg); }
         }
-
-        .envelope-container.fatigued {
-            animation: panting 0.35s infinite ease-in-out;
-            filter: drop-shadow(0 0 25px rgba(255, 123, 114, 0.4));
-        }
+        .envelope-container.fatigued { animation: panting 0.35s infinite ease-in-out; filter: drop-shadow(0 0 25px rgba(255, 123, 114, 0.4)); }
 
         /* --- THE HACKER TERMINAL --- */
         #terminal {
-            position: absolute;
-            width: 90%;
-            max-width: 800px;
-            background-color: #010409;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 40px rgba(0, 255, 65, 0.2);
-            border: 1px solid #30363d;
-            min-height: 450px;
-            opacity: 0;
-            transform: translateY(100px) scale(0.8) rotateX(-20deg);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 5;
-            pointer-events: none;
+            position: absolute; width: 90%; max-width: 800px;
+            background-color: #010409; padding: 30px; border-radius: 8px;
+            box-shadow: 0px 0px 40px rgba(0, 255, 65, 0.2); border: 1px solid #30363d;
+            min-height: 450px; opacity: 0; transform: translateY(100px) scale(0.8) rotateX(-20deg);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5; pointer-events: none;
         }
 
         #terminal.revealed {
-            opacity: 1;
-            transform: translateY(0) scale(1) rotateX(0deg);
-            z-index: 20;
-            pointer-events: auto;
-            /* Allow scrolling on mobile if the text gets too long */
-            max-height: 90vh;
-            overflow-y: auto;
+            opacity: 1; transform: translateY(0) scale(1) rotateX(0deg);
+            z-index: 20; pointer-events: auto; max-height: 90vh; overflow-y: auto;
         }
 
         .line { margin: 8px 0; font-size: 1.1rem; line-height: 1.4; }
-        .cursor {
-            display: inline-block; width: 10px; height: 1.2rem;
-            background-color: #00FF41; vertical-align: middle;
-            animation: blink 1s step-end infinite;
-        }
+        .cursor { display: inline-block; width: 10px; height: 1.2rem; background-color: #00FF41; vertical-align: middle; animation: blink 1s step-end infinite; }
         .cake { color: #FF69B4; white-space: pre; font-size: 1.3rem; margin-top: 20px; font-weight: bold; }
         .code-block { color: #5CE1E6; margin-top: 20px; white-space: pre; }
         .highlight { color: #ff7b72; }
-        .unlocked-mode {
-            animation: systemShock 0.4s;
-            box-shadow: 0px 0px 60px rgba(255, 105, 180, 0.4) !important;
-            border-color: #FF69B4 !important;
-        }
-
-        .flash {
-            position: fixed; inset: 0; background-color: #00FF41;
-            opacity: 0; z-index: 999; pointer-events: none;
-        }
+        .unlocked-mode { animation: systemShock 0.4s; box-shadow: 0px 0px 60px rgba(255, 105, 180, 0.4) !important; border-color: #FF69B4 !important; }
+        .flash { position: fixed; inset: 0; background-color: #00FF41; opacity: 0; z-index: 999; pointer-events: none; }
         .flash.active { animation: flashBang 0.6s ease-out; }
 
-        .particle {
-            position: absolute; color: #00FF41; font-weight: bold; font-size: 1.2rem;
-            pointer-events: none; z-index: 100; text-shadow: 0 0 5px #00FF41;
-            animation: shoot var(--duration) ease-out forwards;
-        }
+        .particle { position: absolute; color: #00FF41; font-weight: bold; font-size: 1.2rem; pointer-events: none; z-index: 100; text-shadow: 0 0 5px #00FF41; animation: shoot var(--duration) ease-out forwards; }
 
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 600px) {
-            /* Scale the envelope down slightly to ensure it doesn't clip on small screens */
             .envelope-container { transform: translate(var(--evade-x, 0px), var(--evade-y, 0px)) scale(calc(var(--scale, 1) * 0.85)) rotate(var(--rot, 0deg)); }
             .envelope-container:hover { --scale: 0.9; }
-            
-            /* Make terminal text smaller so it fits nicely on a phone */
             #terminal { padding: 15px; min-height: 350px; }
             .line { font-size: 0.85rem; margin: 6px 0; }
             .code-block { font-size: 0.85rem; }
@@ -204,28 +112,9 @@
         @keyframes blink { 50% { opacity: 0; } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         @keyframes flashBang { 0% { opacity: 1; } 100% { opacity: 0; } }
-        @keyframes shatter {
-            0% { transform: scale(var(--scale, 1)); opacity: 1; filter: brightness(2); }
-            20% { transform: scale(calc(var(--scale, 1) + 0.2)) rotate(5deg); }
-            100% { transform: scale(0) rotate(-15deg); opacity: 0; }
-        }
-        @keyframes shoot {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rot)); opacity: 0; }
-        }
-        @keyframes systemShock {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
+        @keyframes shatter { 0% { transform: scale(var(--scale, 1)); opacity: 1; filter: brightness(2); } 20% { transform: scale(calc(var(--scale, 1) + 0.2)) rotate(5deg); } 100% { transform: scale(0) rotate(-15deg); opacity: 0; } }
+        @keyframes shoot { 0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rot)); opacity: 0; } }
+        @keyframes systemShock { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
     </style>
 </head>
 <body>
@@ -259,8 +148,6 @@
         let isOpened = false;
         let lineIndex = 0;
         let isWaiting = false;
-
-        // Evasion Logic Parameters
         let escapeCount = 0;
         const maxEscapes = 12; 
         let fatigued = false;
@@ -282,36 +169,32 @@
             "FINE... YOU WIN. TAP ME!"
         ];
 
-        // Unified function to handle both Desktop Mouse and Mobile Touch
         function handleInteractionTracker(clientX, clientY) {
             if (isOpened || fatigued || isEvading) return;
-
             const rect = envelope.getBoundingClientRect();
             const envelopeCenterX = rect.left + rect.width / 2;
             const envelopeCenterY = rect.top + rect.height / 2;
-
-            // Calculate distance between cursor/finger and envelope center
             const distance = Math.hypot(clientX - envelopeCenterX, clientY - envelopeCenterY);
 
-            // Trigger escape if within 185px. On mobile, this will fire the millisecond they tap down!
             if (distance < 185) {
                 triggerEvasion(clientX, clientY);
             }
         }
 
         // Desktop tracking
-        document.addEventListener('mousemove', (e) => {
-            handleInteractionTracker(e.clientX, e.clientY);
-        });
+        document.addEventListener('mousemove', (e) => { handleInteractionTracker(e.clientX, e.clientY); });
+        
+        // General mobile touch tracking
+        document.addEventListener('touchstart', (e) => { handleInteractionTracker(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+        document.addEventListener('touchmove', (e) => { handleInteractionTracker(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
 
-        // Mobile tracking (Fires instantly when the screen is tapped)
-        document.addEventListener('touchstart', (e) => {
-            handleInteractionTracker(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-
-        document.addEventListener('touchmove', (e) => {
-            handleInteractionTracker(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
+        // --- THE MOBILE FIX ---
+        // Intercept a direct tap right on the envelope before it can become a click
+        envelope.addEventListener('touchstart', (e) => {
+            if (isOpened || fatigued) return; 
+            e.preventDefault(); // Kills the click entirely
+            triggerEvasion(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
 
         // Evasion displacement
         function triggerEvasion(cursorX, cursorY) {
@@ -323,17 +206,14 @@
                 envelope.classList.add('fatigued');
                 warning.innerText = evadeTaunts[maxEscapes] || "TIRED... OK, TAP ME!";
                 warning.style.color = "#ff7b72";
-                
                 envelope.style.setProperty('--evade-x', '0px');
                 envelope.style.setProperty('--evade-y', '0px');
-                
                 setTimeout(() => { isEvading = false; }, 200);
                 return;
             }
 
             warning.innerText = evadeTaunts[escapeCount - 1] || "SYSTEM DODGING!";
-
-            const margin = 50; // Reduced margin for smaller mobile screens
+            const margin = 50; 
             const halfWidth = (window.innerWidth - 340) / 2 - margin;
             const halfHeight = (window.innerHeight - 220) / 2 - margin;
 
@@ -344,10 +224,7 @@
             const projectedWorldY = window.innerHeight / 2 + targetY;
             const cursorDistToTarget = Math.hypot(cursorX - projectedWorldX, cursorY - projectedWorldY);
 
-            if (cursorDistToTarget < 200) {
-                targetX = -targetX;
-                targetY = -targetY;
-            }
+            if (cursorDistToTarget < 200) { targetX = -targetX; targetY = -targetY; }
 
             envelope.style.setProperty('--evade-x', `${targetX}px`);
             envelope.style.setProperty('--evade-y', `${targetY}px`);
@@ -379,24 +256,33 @@
             "<div class='cake'>\n    ,,,,, \n   _|||||_ \n  {~*~*~*~} \n __{*~*~*~*}__\n `-------------`\n</div>",
             "HAPPY ALGORITHM DAY, BADDEST! Age++ executed successfully. 🚀",
             " ",
-            "<span class='highlight'>--- INCOMING TRANSMISSION FOR ADEWALE ---</span>",
+            "<span class='highlight'>--- INCOMING TRANSMISSION FOR Hamdalat ---</span>",
             "May your code always compile on the first run, and your servers never crash.",
             "I pray this new year brings you endless prosperity, answered prayers, and boundless joy.",
             "May God's favor surround you, granting you peace, good health, and success in all your endeavors.",
-            "Keep shining, keep building, and have the most amazing birthday!"
+            "Keep shining, keep building, and have the most amazing birthday!",
+            "Have a nice day 🤭🤣😅🤣"
+
         ];
 
+        // --- THE CLICK FIX ---
         envelope.addEventListener('click', (e) => {
             if (isOpened) return;
-            isOpened = true;
 
+            // If it's not tired yet, refuse to open! Force the jump instead.
+            if (!fatigued) {
+                triggerEvasion(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2);
+                return;
+            }
+
+            isOpened = true;
             envelope.classList.remove('fatigued');
             envelope.classList.add('open');
 
             setTimeout(() => {
                 flash.classList.add('active');
                 envelope.classList.add('explode');
-                spawnParticles(e.clientX, e.clientY);
+                spawnParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2);
 
                 setTimeout(() => {
                     terminalBox.classList.add('revealed');
@@ -472,9 +358,7 @@
                     const line = surpriseSequence[sIndex];
                     typeLine(line, false, runSurprise);
                     sIndex++;
-                    
-                    // Auto-scroll the terminal to the bottom as it types on mobile
-                    terminalBox.scrollTop = terminalBox.scrollHeight;
+                    terminalBox.scrollTop = terminalBox.scrollHeight; // Auto-scrolls on mobile
                 } else {
                     cursor.style.display = 'none';
                 }
@@ -482,7 +366,6 @@
             runSurprise();
         }
 
-        // Tap/Click to progress Phase 2
         document.addEventListener('keydown', () => { if (isWaiting) triggerSurprise(); });
         document.addEventListener('click', () => { if (isWaiting) triggerSurprise(); });
 
